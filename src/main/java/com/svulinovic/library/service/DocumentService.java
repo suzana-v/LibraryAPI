@@ -1,10 +1,10 @@
 package com.svulinovic.library.service;
 
 import com.svulinovic.library.exception.BadRequestException;
-import com.svulinovic.library.parser.mrz.Type1Mrz;
-import com.svulinovic.library.parser.mrz.Type1MrzParser;
 import com.svulinovic.library.model.OcrRequest;
 import com.svulinovic.library.model.OcrResponse;
+import com.svulinovic.library.parser.mrz.Type1Mrz;
+import com.svulinovic.library.parser.mrz.Type1MrzParser;
 import com.svulinovic.library.repository.DocumentRepository;
 import com.svulinovic.library.retrofit.microblink.MicroblinkClient;
 import com.svulinovic.library.retrofit.microblink.model.BlinkIdEndpointResponse;

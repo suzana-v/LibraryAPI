@@ -2,13 +2,11 @@ package com.svulinovic.library.service;
 
 import com.svulinovic.library.model.BookHistoryResponse;
 import com.svulinovic.library.model.BorrowBookRequest;
-import com.svulinovic.library.model.HistoryEntry;
 import com.svulinovic.library.repository.BookRepository;
 import com.svulinovic.library.util.Helper;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service

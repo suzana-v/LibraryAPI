@@ -19,47 +19,42 @@ public class MrzParser {
     }
 
     public String extract(FixedLengthData type) {
-        int index = type.getIndex();
-        int length = type.getLength();
-
-        String data = mrz.substring(index, index + length);
+        String data = getData(type);
         return data.replace(FILLER, "");
     }
 
     public String extract(VariableLengthData type) {
-        int index = type.getIndex();
-        int length = type.getLength();
-
-        String data = mrz.substring(index, index + length);
+        String data = getData(type);
         String[] dataParts = data.split(VARIABLE_DATA_SEPARATOR);
         return dataParts[type.getPosition()].replace(FILLER, " ");
     }
 
     public boolean isValid(CheckDigit type) {
-        int index = type.getIndex();
-        String checkDigit = mrz.substring(index, index + 1);
+        String checkDigit = getData(type);
 
-        int dataCheckIndex = type.getDataCheck().getIndex();
-        int dataCheckLength = type.getDataCheck().getLength();
-        String dataCheck = mrz.substring(dataCheckIndex, dataCheckIndex + dataCheckLength);
+        String dataCheck = getData(type.getDataCheck());
         int calculatedCheckDigit = calculateCheckDigit(dataCheck);
 
         return checkDigit.equals(String.valueOf(calculatedCheckDigit));
     }
 
     public boolean isValid(CompositeCheckDigit type) {
-        int index = type.getIndex();
-        String checkDigit = mrz.substring(index, index + 1);
+        String checkDigit = getData(type);
 
         StringBuilder dataCheck = new StringBuilder();
-        for (FixedLengthData data : type.getDataCheck()) {
-            int dataCheckIndex = data.getIndex();
-            int dataCheckLength = data.getLength();
-            dataCheck.append(mrz, dataCheckIndex, dataCheckIndex + dataCheckLength);
+        for (FixedLengthData dataCheckPart : type.getDataCheck()) {
+            dataCheck.append(getData(dataCheckPart));
         }
         int calculatedCheckDigit = calculateCheckDigit(dataCheck.toString());
 
         return checkDigit.equals(String.valueOf(calculatedCheckDigit));
+    }
+
+    private String getData(FixedLengthData type) {
+        int index = type.getIndex();
+        int length = type.getLength();
+
+        return mrz.substring(index, index + length);
     }
 
     private int calculateCheckDigit(String in) {
@@ -79,10 +74,9 @@ public class MrzParser {
         if (in == '<') {
             return 0;
         }
-        for (int i = 0; i < ALPHABET.length(); i++) {
-            if (in == ALPHABET.charAt(i)) {
-                return i;
-            }
+        int index = ALPHABET.indexOf(in);
+        if (index >= 0) {
+            return index;
         }
         throw new RuntimeException("Failed to calculate char weight for: " + in);
     }
